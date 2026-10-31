@@ -1,0 +1,117 @@
+{
+  "SEGMENTOS": {
+    "Settings": {
+      "Theme": {
+        "Name": "Theme",
+        "Hint": "Colors for the sidebar filter and the segments window. Each user picks their own."
+      }
+    },
+    "Themes": {
+      "ambar": "Amber",
+      "esmeralda": "Emerald",
+      "arcano": "Arcane",
+      "gelo": "Frost",
+      "carmesim": "Crimson",
+      "ouro": "Gold",
+      "pergaminho": "Parchment (light)",
+      "obsidiana": "Obsidian (dark)"
+    },
+    "Type": {
+      "actors": {
+        "Label": "Actors",
+        "Title": "Actor Segments",
+        "All": "All actors"
+      },
+      "items": {
+        "Label": "Items",
+        "Title": "Item Segments",
+        "All": "All items"
+      }
+    },
+    "Sidebar": {
+      "Filter": "Filter by segment",
+      "Unassigned": "No segment",
+      "Hidden": "Hidden",
+      "ClearFilter": "Clear filter",
+      "Manage": "Manage segments",
+      "Hide": "Hide from sidebar",
+      "Restore": "Show in sidebar"
+    },
+    "Notify": {
+      "GMOnlyEdit": "Only the GM can change segments.",
+      "GMOnlyManage": "Only the GM can manage segments.",
+      "PrepareError": "Could not change the segments. Check the console (F12).",
+      "SaveError": "Could not save the segments. Check the console (F12).",
+      "Cleanup": "Custom Segments: {count} reference(s) to deleted entries were removed from the {type} segments.",
+      "Hidden": "{name} is now hidden.",
+      "Restored": "{name} is back in the sidebar.",
+      "HideError": "Could not change {name}.",
+      "RenameMissing": "The segment {name} no longer exists."
+    },
+    "Manager": {
+      "Segments": "Segments",
+      "NewSegment": "New segment",
+      "RenameSegment": "Rename segment",
+      "NoneYet": "None yet",
+      "Unnamed": "Unnamed",
+      "Hint": "Segments only store references. Nothing is moved, copied or deleted.",
+      "Theme": "Theme",
+      "ThemeButton": "{name} theme",
+      "EmptyTitle": "No segments yet",
+      "EmptyText": "Segments group folders and documents without moving them.",
+      "Create": "Create segment",
+      "Rename": "Rename",
+      "Delete": "Delete segment",
+      "DeleteConfirm": "Delete the segment <strong>{name}</strong>? The folders and documents stay in the world.",
+      "Name": "Name",
+      "Confirm": "Confirm",
+      "TabView": "Contents",
+      "TabEdit": "Add / remove",
+      "Search": "Search by name",
+      "NoResults": "Nothing found.",
+      "Meta": "{folders} · {individuals} · {total} in total",
+      "Count": {
+        "Folders": {
+          "one": "{count} folder",
+          "other": "{count} folders"
+        },
+        "Individuals": {
+          "one": "{count} single entry",
+          "other": "{count} single entries"
+        },
+        "Documents": {
+          "one": "{count} document",
+          "other": "{count} documents"
+        }
+      },
+      "SegmentEmptyTitle": "Empty segment",
+      "SegmentEmptyText": "Add folders or documents to see them here.",
+      "AddContent": "Add content",
+      "Folders": "Folders",
+      "Individuals": "Single entries",
+      "RootFolder": "Top-level folder",
+      "InFolder": "in {path}",
+      "ChipIn": "In {name}",
+      "FolderEmpty": "Empty folder.",
+      "NoFolder": "No folder",
+      "HiddenTag": "hidden",
+      "AlsoVia": "also included by the folder {name}",
+      "RemoveFolder": "Remove folder from segment",
+      "RemoveDocument": "Remove from segment",
+      "CheckedFolders": "{count} selected",
+      "CheckedDocuments": "{count} selected",
+      "FolderHint": "Selecting a folder includes everything inside it, subfolders too.",
+      "NoFolders": "No folders of this type.",
+      "NoDocuments": "No documents in this world.",
+      "InheritedFrom": "inherited from {name}",
+      "AlsoInheritedFrom": "also inherited from {name}",
+      "InheritedTooltip": "Included because the folder {name} is in the segment. To remove it, clear the parent folder.",
+      "Via": "already included by {name}",
+      "HiddenTitle": "Hidden",
+      "HiddenMeta": "Hidden from the sidebar. They are still in the world and can be restored.",
+      "Restore": "Restore",
+      "NothingHiddenTitle": "Nothing hidden",
+      "NothingHiddenText": "Right-click a document in the sidebar to hide it."
+    }
+  }
+}

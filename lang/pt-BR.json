@@ -1,0 +1,117 @@
+{
+  "SEGMENTOS": {
+    "Settings": {
+      "Theme": {
+        "Name": "Tema",
+        "Hint": "Cores do filtro da barra lateral e da janela de segmentos. Cada usuário escolhe o seu."
+      }
+    },
+    "Themes": {
+      "ambar": "Âmbar",
+      "esmeralda": "Esmeralda",
+      "arcano": "Arcano",
+      "gelo": "Gelo",
+      "carmesim": "Carmesim",
+      "ouro": "Ouro",
+      "pergaminho": "Pergaminho (claro)",
+      "obsidiana": "Obsidiana (escuro)"
+    },
+    "Type": {
+      "actors": {
+        "Label": "Atores",
+        "Title": "Segmentos de Atores",
+        "All": "Todos os atores"
+      },
+      "items": {
+        "Label": "Itens",
+        "Title": "Segmentos de Itens",
+        "All": "Todos os itens"
+      }
+    },
+    "Sidebar": {
+      "Filter": "Filtrar por segmento",
+      "Unassigned": "Sem segmento",
+      "Hidden": "Ocultos",
+      "ClearFilter": "Limpar filtro",
+      "Manage": "Gerenciar segmentos",
+      "Hide": "Ocultar da barra lateral",
+      "Restore": "Restaurar na barra lateral"
+    },
+    "Notify": {
+      "GMOnlyEdit": "Só o Mestre pode alterar segmentos.",
+      "GMOnlyManage": "Só o Mestre pode gerenciar segmentos.",
+      "PrepareError": "Não foi possível alterar os segmentos. Veja o console (F12).",
+      "SaveError": "Não foi possível salvar os segmentos. Veja o console (F12).",
+      "Cleanup": "Segmentos Personalizados: {count} referência(s) a itens excluídos saíram dos segmentos de {type}.",
+      "Hidden": "{name} foi ocultado.",
+      "Restored": "{name} voltou para a barra lateral.",
+      "HideError": "Não foi possível alterar {name}.",
+      "RenameMissing": "O segmento {name} não existe mais."
+    },
+    "Manager": {
+      "Segments": "Segmentos",
+      "NewSegment": "Novo segmento",
+      "RenameSegment": "Renomear segmento",
+      "NoneYet": "Nenhum ainda",
+      "Unnamed": "Sem nome",
+      "Hint": "Segmentos guardam só referências. Nada é movido, copiado ou apagado.",
+      "Theme": "Tema",
+      "ThemeButton": "Tema {name}",
+      "EmptyTitle": "Nenhum segmento ainda",
+      "EmptyText": "Segmentos reúnem pastas e documentos sem tirá-los do lugar.",
+      "Create": "Criar segmento",
+      "Rename": "Renomear",
+      "Delete": "Excluir segmento",
+      "DeleteConfirm": "Excluir o segmento <strong>{name}</strong>? As pastas e os documentos continuam no mundo.",
+      "Name": "Nome",
+      "Confirm": "Confirmar",
+      "TabView": "Conteúdo",
+      "TabEdit": "Adicionar / remover",
+      "Search": "Buscar por nome",
+      "NoResults": "Nada encontrado.",
+      "Meta": "{folders} · {individuals} · {total} no total",
+      "Count": {
+        "Folders": {
+          "one": "{count} pasta",
+          "other": "{count} pastas"
+        },
+        "Individuals": {
+          "one": "{count} avulso",
+          "other": "{count} avulsos"
+        },
+        "Documents": {
+          "one": "{count} documento",
+          "other": "{count} documentos"
+        }
+      },
+      "SegmentEmptyTitle": "Segmento vazio",
+      "SegmentEmptyText": "Inclua pastas ou documentos para que apareçam aqui.",
+      "AddContent": "Adicionar conteúdo",
+      "Folders": "Pastas",
+      "Individuals": "Documentos avulsos",
+      "RootFolder": "Pasta raiz",
+      "InFolder": "em {path}",
+      "ChipIn": "Em {name}",
+      "FolderEmpty": "Pasta vazia.",
+      "NoFolder": "Sem pasta",
+      "HiddenTag": "oculto",
+      "AlsoVia": "também entra pela pasta {name}",
+      "RemoveFolder": "Remover pasta do segmento",
+      "RemoveDocument": "Remover do segmento",
+      "CheckedFolders": "{count} marcada(s)",
+      "CheckedDocuments": "{count} marcado(s)",
+      "FolderHint": "Marcar uma pasta inclui tudo o que estiver dentro dela, inclusive subpastas.",
+      "NoFolders": "Nenhuma pasta deste tipo.",
+      "NoDocuments": "Nenhum documento neste mundo.",
+      "InheritedFrom": "herdada de {name}",
+      "AlsoInheritedFrom": "também herdada de {name}",
+      "InheritedTooltip": "Incluída porque a pasta {name} está no segmento. Para tirar, desmarque a pasta de cima.",
+      "Via": "já entra por {name}",
+      "HiddenTitle": "Ocultos",
+      "HiddenMeta": "Escondidos da barra lateral. Continuam no mundo e podem ser restaurados.",
+      "Restore": "Restaurar",
+      "NothingHiddenTitle": "Nada oculto",
+      "NothingHiddenText": "Use o botão direito em um documento da barra lateral para ocultá-lo."
+    }
+  }
+}
