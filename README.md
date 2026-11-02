@@ -9,7 +9,7 @@ Se encontrar bugs ou tiver sugestões, abra uma [issue](https://github.com/Daphe
 
 ---
 
-**Versão 1.7.0** · Foundry VTT 14 · Qualquer sistema · Português e English · Licença MIT · ✅ Testado no Foundry
+**Versão 1.7.1** · Foundry VTT 14 · Qualquer sistema · Português e English · Licença MIT · ✅ Testado no Foundry
 
 Módulo para Foundry VTT 14 (não funciona em versões anteriores). Não depende de nenhum sistema de jogo. Permite ao Mestre reunir pastas inteiras e documentos avulsos de Atores e Itens em segmentos (ex.: "Inimigos", "Chefes"), sem mover, copiar ou apagar nada.
 

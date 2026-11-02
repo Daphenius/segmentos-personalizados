@@ -108,21 +108,22 @@ export function addContextOptions(type, options) {
   if (!game.user.isGM) return;
   const getDoc = li => TYPES[type].collection().get(getDocId(li)) ?? null;
 
+  // Formato do Foundry 14: label, visible(target) e onClick(event, target).
   options.push(
     {
-      name: t("Sidebar.Hide"),
-      icon: '<i class="fa-solid fa-eye-slash"></i>',
-      condition: li => {
-        const doc = getDoc(li);
+      label: t("Sidebar.Hide"),
+      icon: "fa-solid fa-eye-slash",
+      visible: target => {
+        const doc = getDoc(target);
         return Boolean(doc) && !isHidden(doc);
       },
-      callback: li => setHidden(getDoc(li), true)
+      onClick: (event, target) => setHidden(getDoc(target), true)
     },
     {
-      name: t("Sidebar.Restore"),
-      icon: '<i class="fa-solid fa-eye"></i>',
-      condition: li => isHidden(getDoc(li)),
-      callback: li => setHidden(getDoc(li), false)
+      label: t("Sidebar.Restore"),
+      icon: "fa-solid fa-eye",
+      visible: target => isHidden(getDoc(target)),
+      onClick: (event, target) => setHidden(getDoc(target), false)
     }
   );
 }

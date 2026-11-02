@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.7.1
+
+### Corrigido
+- **Menu do botão direito (Ocultar/Restaurar):** as opções usavam o formato antigo (`name`, `condition`, `callback`). O Foundry 14 usa `label`, `visible` e `onClick(event, alvo)`. Agora seguem o formato atual, sem depender da compatibilidade com o formato antigo.
+- **Busca da janela de segmentos perdia o cursor:** se outro Mestre (ou o próprio Foundry) alterasse um ator, item ou pasta enquanto você digitava na busca, a janela era redesenhada e o campo perdia o foco. Agora o cursor volta para onde estava.
+
+### Documentação
+- README: a linha de resumo diz que o módulo é testado no Foundry e no D&D 5e.
+
 ## 1.7.0
 
 ### Adicionado

@@ -273,6 +273,11 @@ export class SegmentManager extends ApplicationV2 {
   async _preRender(context, options) {
     await super._preRender(context, options);
     this._scrollTop = this.element?.querySelector(".sp-scroll")?.scrollTop ?? 0;
+    // Um redesenho vindo de outro cliente não pode tirar o cursor de quem está digitando na busca.
+    const search = this.element?.querySelector(".sp-search input");
+    this._searchFocus = search && search === document.activeElement
+      ? { start: search.selectionStart, end: search.selectionEnd }
+      : null;
   }
 
   _onRender(context, options) {
@@ -287,6 +292,11 @@ export class SegmentManager extends ApplicationV2 {
       this.search = input.value;
       this.applySearch();
     });
+    if (input && this._searchFocus) {
+      input.focus();
+      input.setSelectionRange(this._searchFocus.start, this._searchFocus.end);
+    }
+    this._searchFocus = null;
     this.applySearch();
 
     // "indeterminate" só existe como propriedade do elemento, não como atributo HTML.
