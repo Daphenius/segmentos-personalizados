@@ -43,8 +43,11 @@ export function makeWorld({ isGM = true, activeGM = true, lang = "pt-BR" } = {})
       saveGate = new Promise(resolve => { release = resolve; });
       return () => { saveGate = null; release(); };
     },
-    folder(id, name, parent = null, type = "Actor") {
-      const folder = { id, name, type, folder: parent ? folders.get(parent) : null };
+    folder(id, name, parent = null, type = "Actor", flags = {}) {
+      const folder = {
+        id, name, type, flags, documentName: "Folder", folder: parent ? folders.get(parent) : null,
+        getFlag(scope, key) { return this.flags[scope]?.[key]; }
+      };
       folders.set(id, folder);
       return folder;
     },

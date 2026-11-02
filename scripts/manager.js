@@ -1,6 +1,7 @@
 import {
   MODULE_ID, TYPES, THEMES, NAME_MAX_LENGTH, t, tCount, displayName,
-  pickSegmentId, isHidden, folderTree, folderPath, inheritedFrom, coveringFolderId, countSegment, resolveSegment
+  typeOfFolder, pickSegmentId, isHidden, isConcealed, hiddenFolderIn, folderTree, folderChain, folderPath, inheritedFrom,
+  coveringFolderId, countSegment, resolveSegment
 } from "./data.js";
 import { getSegments, updateSegments, setHidden, currentTheme } from "./store.js";
 
@@ -55,6 +56,7 @@ export class SegmentManager extends ApplicationV2 {
       removeFolder: SegmentManager.onRemoveFolder,
       removeDocument: SegmentManager.onRemoveDocument,
       restoreDocument: SegmentManager.onRestore,
+      restoreFolder: SegmentManager.onRestoreFolder,
       setTheme: SegmentManager.onSetTheme
     }
   };
@@ -77,6 +79,7 @@ export class SegmentManager extends ApplicationV2 {
     this.selectedId = pickSegmentId(segments, this.selectedId);
     const current = segments.find(s => s.id === this.selectedId);
     const hiddenDocs = TYPES[this.type].collection().filter(isHidden);
+    const hiddenFolders = folderTree(this.type).map(({ folder }) => folder).filter(isHidden);
     const showHidden = this.mode === "hidden";
     const theme = currentTheme();
 
@@ -95,7 +98,7 @@ export class SegmentManager extends ApplicationV2 {
     }).join("");
 
     let main;
-    if (showHidden) main = this.renderHidden(hiddenDocs);
+    if (showHidden) main = this.renderHidden(hiddenFolders, hiddenDocs);
     else if (current) main = this.renderSegment(current);
     else main = emptyState("fa-layer-group", t("Manager.EmptyTitle"), t("Manager.EmptyText"),
       `<button type="button" class="sp-btn sp-btn-primary" data-action="createSegment"><i class="fa-solid fa-plus" inert></i> ${esc(t("Manager.Create"))}</button>`);
@@ -113,7 +116,7 @@ export class SegmentManager extends ApplicationV2 {
           <button type="button" class="sp-nav-item ${showHidden ? "active" : ""}" data-action="setMode" data-mode="hidden">
             <i class="fa-solid fa-eye-slash" inert></i>
             <span class="sp-nav-label">${esc(t("Manager.HiddenTitle"))}</span>
-            <span class="sp-badge">${hiddenDocs.length}</span>
+            <span class="sp-badge">${hiddenFolders.length + hiddenDocs.length}</span>
           </button>
           <div class="sp-themes" role="group" aria-label="${esc(t("Manager.Theme"))}">${themeButtons}</div>
           <p class="sp-hint">${esc(t("Manager.Hint"))}</p>
@@ -171,9 +174,9 @@ export class SegmentManager extends ApplicationV2 {
         </div>
         ${docs.length
           ? `<div class="sp-chips">${docs.map(doc => `
-              <a class="sp-chip ${isHidden(doc) ? "sp-is-hidden" : ""}" data-action="openDocument" data-doc-id="${esc(doc.id)}" data-search="${esc(searchKey(doc.name))}"
+              <a class="sp-chip ${isConcealed(doc) ? "sp-is-hidden" : ""}" data-action="openDocument" data-doc-id="${esc(doc.id)}" data-search="${esc(searchKey(doc.name))}"
                 ${doc.folder?.id !== folder.id ? `data-tooltip-text="${esc(t("Manager.ChipIn", { name: doc.folder.name }))}"` : ""}>
-                ${avatar(doc)}<span>${esc(doc.name)}</span>${isHidden(doc) ? `<i class="fa-solid fa-eye-slash" inert></i>` : ""}
+                ${avatar(doc)}<span>${esc(doc.name)}</span>${isConcealed(doc) ? `<i class="fa-solid fa-eye-slash" inert></i>` : ""}
               </a>`).join("")}</div>`
           : `<p class="sp-muted">${esc(t("Manager.FolderEmpty"))}</p>`}
       </div>`).join("");
@@ -182,7 +185,7 @@ export class SegmentManager extends ApplicationV2 {
       <div class="sp-row" data-search="${esc(searchKey(doc.name))}">
         ${avatar(doc)}
         <div class="sp-title">
-          <a data-action="openDocument" data-doc-id="${esc(doc.id)}">${esc(doc.name)}</a>${isHidden(doc) ? ` <span class="sp-tag">${esc(t("Manager.HiddenTag"))}</span>` : ""}
+          <a data-action="openDocument" data-doc-id="${esc(doc.id)}">${esc(doc.name)}</a>${isConcealed(doc) ? ` <span class="sp-tag">${esc(t("Manager.HiddenTag"))}</span>` : ""}
           <small>${esc(doc.folder ? folderPath(doc.folder) : t("Manager.NoFolder"))}${viaFolder ? ` · ${esc(t("Manager.AlsoVia", { name: viaFolder.name }))}` : ""}</small>
         </div>
         ${iconButton("removeDocument", "fa-xmark", t("Manager.RemoveDocument"), `data-doc-id="${esc(doc.id)}"`)}
@@ -241,9 +244,24 @@ export class SegmentManager extends ApplicationV2 {
       ${noResults()}`;
   }
 
-  renderHidden(hiddenDocs) {
-    const body = hiddenDocs.length
-      ? `<div class="sp-list">${hiddenDocs.map(doc => `
+  renderHidden(hiddenFolders, hiddenDocs) {
+    const docs = TYPES[this.type].collection();
+    const folderRows = hiddenFolders.map(folder => {
+      const inside = docs.filter(doc => folderChain(doc.folder).includes(folder.id)).length;
+      const parent = hiddenFolderIn(folder.folder);
+      const where = folder.folder ? t("Manager.InFolder", { path: folderPath(folder.folder) }) : t("Manager.RootFolder");
+      return `
+          <div class="sp-row" data-search="${esc(searchKey(folder.name))}">
+            ${folderIcon(folder, false)}
+            <div class="sp-title">
+              <strong>${esc(folder.name)}</strong>${parent ? ` <span class="sp-tag sp-tag-soft">${esc(t("Manager.InsideHidden", { name: parent.name }))}</span>` : ""}
+              <small>${esc(where)} · ${esc(tCount("Manager.Count.Documents", inside))}</small>
+            </div>
+            <button type="button" class="sp-btn" data-action="restoreFolder" data-folder-id="${esc(folder.id)}"><i class="fa-solid fa-eye" inert></i> ${esc(t("Manager.Restore"))}</button>
+          </div>`;
+    }).join("");
+
+    const docRows = hiddenDocs.map(doc => `
           <div class="sp-row" data-search="${esc(searchKey(doc.name))}">
             ${avatar(doc)}
             <div class="sp-title">
@@ -251,7 +269,12 @@ export class SegmentManager extends ApplicationV2 {
               <small>${esc(doc.folder ? folderPath(doc.folder) : t("Manager.NoFolder"))}</small>
             </div>
             <button type="button" class="sp-btn" data-action="restoreDocument" data-doc-id="${esc(doc.id)}"><i class="fa-solid fa-eye" inert></i> ${esc(t("Manager.Restore"))}</button>
-          </div>`).join("")}</div>
+          </div>`).join("");
+
+    const any = hiddenFolders.length || hiddenDocs.length;
+    const body = any
+      ? `${hiddenFolders.length ? `<div class="sp-group"><h3 class="sp-section">${esc(t("Manager.HiddenFolders"))} <span>${hiddenFolders.length}</span></h3><div class="sp-list">${folderRows}</div></div>` : ""}
+          ${hiddenDocs.length ? `<div class="sp-group"><h3 class="sp-section">${esc(t("Manager.HiddenDocuments"))} <span>${hiddenDocs.length}</span></h3><div class="sp-list">${docRows}</div></div>` : ""}
           ${noResults()}`
       : emptyState("fa-eye", t("Manager.NothingHiddenTitle"), t("Manager.NothingHiddenText"));
 
@@ -262,7 +285,7 @@ export class SegmentManager extends ApplicationV2 {
           <span class="sp-meta">${esc(t("Manager.HiddenMeta"))}</span>
         </div>
       </header>
-      ${hiddenDocs.length ? `<div class="sp-bar">${searchBox(this.search)}</div>` : ""}
+      ${any ? `<div class="sp-bar">${searchBox(this.search)}</div>` : ""}
       <div class="sp-scroll">${body}</div>`;
   }
 
@@ -448,6 +471,11 @@ export class SegmentManager extends ApplicationV2 {
 
   static onRestore(event, target) {
     return setHidden(TYPES[this.type].collection().get(target.dataset.docId), false);
+  }
+
+  static onRestoreFolder(event, target) {
+    const folder = game.folders.get(target.dataset.folderId);
+    if (typeOfFolder(folder) === this.type) return setHidden(folder, false);
   }
 }
 

@@ -1,6 +1,6 @@
 import { MODULE_ID, TYPES, typeOfFolder } from "./data.js";
 import { registerSettings, currentTheme, scheduleCleanup, cleanupInvalidRefs } from "./store.js";
-import { renderDirectoryControls, addContextOptions } from "./sidebar.js";
+import { renderDirectoryControls, addContextOptions, addFolderContextOptions } from "./sidebar.js";
 import { managers, refreshManager } from "./manager.js";
 
 // Só estes campos aparecem na janela de segmentos. Outras mudanças (PV, atributos,
@@ -39,12 +39,18 @@ Hooks.once("init", () => {
     });
   }
 
-  for (const event of ["createFolder", "updateFolder"]) {
-    Hooks.on(event, folder => {
-      const type = typeOfFolder(folder);
-      if (type) refreshManager(type);
-    });
-  }
+  Hooks.on("getFolderContextOptions", addFolderContextOptions);
+  Hooks.on("createFolder", folder => {
+    const type = typeOfFolder(folder);
+    if (type) refreshManager(type);
+  });
+  Hooks.on("updateFolder", (folder, changes) => {
+    const type = typeOfFolder(folder);
+    if (!type) return;
+    // Ocultar ou restaurar uma pasta só muda uma flag; a barra lateral precisa ser redesenhada.
+    if (changes.flags?.[MODULE_ID] !== undefined) ui[type]?.render();
+    refreshManager(type);
+  });
   Hooks.on("deleteFolder", folder => {
     const type = typeOfFolder(folder);
     if (!type) return;

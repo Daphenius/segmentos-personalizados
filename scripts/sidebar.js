@@ -1,7 +1,7 @@
 // O Foundry não tem API para filtrar a barra lateral. Este arquivo trabalha sobre o HTML
 // que o diretório já desenhou e é reaplicado a cada renderActorDirectory/renderItemDirectory.
 
-import { TYPES, t, displayName, isHidden, segmentHas, folderChain } from "./data.js";
+import { TYPES, t, displayName, isHidden, isConcealed, hiddenFolderIn, segmentHas, folderChain, typeOfFolder } from "./data.js";
 import { getSegments, setHidden } from "./store.js";
 import { openManager } from "./manager.js";
 
@@ -78,7 +78,7 @@ export function applyFilter(type, root) {
   const collection = TYPES[type].collection();
 
   const isVisible = doc => {
-    const hidden = isHidden(doc);
+    const hidden = isConcealed(doc);
     if (selected === "__hidden") return hidden;
     if (hidden) return false;
     if (selected === "__unassigned") return !segments.some(s => segmentHas(s, doc));
@@ -99,9 +99,46 @@ export function applyFilter(type, root) {
       if (isVisible(doc)) for (const id of folderChain(doc.folder)) foldersWithContent.add(id);
     }
   }
-  for (const li of root.querySelectorAll("li.folder[data-folder-id]")) {
-    li.classList.toggle("sp-hidden", Boolean(selected) && !foldersWithContent.has(li.dataset.folderId));
+  // Em "Ocultos", pastas ocultas aparecem mesmo vazias, com o caminho até elas.
+  if (selected === "__hidden") {
+    for (const folder of game.folders) {
+      if (typeOfFolder(folder) === type && hiddenFolderIn(folder)) {
+        for (const id of folderChain(folder)) foldersWithContent.add(id);
+      }
+    }
   }
+  for (const li of root.querySelectorAll("li.folder[data-folder-id]")) {
+    const id = li.dataset.folderId;
+    let hide;
+    if (selected === "__hidden") hide = !foldersWithContent.has(id);
+    else hide = Boolean(hiddenFolderIn(game.folders.get(id))) || (Boolean(selected) && !foldersWithContent.has(id));
+    li.classList.toggle("sp-hidden", hide);
+  }
+}
+
+/** Menu do botão direito das pastas. O hook é o mesmo para todas as barras laterais. */
+export function addFolderContextOptions(app, options) {
+  if (!game.user.isGM) return;
+  if (!Object.values(TYPES).some(({ documentName }) => documentName === app?.documentName)) return;
+  const folderOf = target => game.folders.get(target?.closest("[data-folder-id]")?.dataset.folderId) ?? null;
+
+  options.push(
+    {
+      label: t("Sidebar.HideFolder"),
+      icon: "fa-solid fa-eye-slash",
+      visible: target => {
+        const folder = folderOf(target);
+        return Boolean(folder) && !isHidden(folder);
+      },
+      onClick: (event, target) => setHidden(folderOf(target), true)
+    },
+    {
+      label: t("Sidebar.RestoreFolder"),
+      icon: "fa-solid fa-eye",
+      visible: target => isHidden(folderOf(target)),
+      onClick: (event, target) => setHidden(folderOf(target), false)
+    }
+  );
 }
 
 export function addContextOptions(type, options) {

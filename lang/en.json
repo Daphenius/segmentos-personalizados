@@ -35,7 +35,9 @@
       "ClearFilter": "Clear filter",
       "Manage": "Manage segments",
       "Hide": "Hide from sidebar",
-      "Restore": "Show in sidebar"
+      "Restore": "Show in sidebar",
+      "HideFolder": "Hide folder from sidebar",
+      "RestoreFolder": "Show folder in sidebar"
     },
     "Notify": {
       "GMOnlyEdit": "Only the GM can change segments.",
@@ -46,7 +48,9 @@
       "Hidden": "{name} is now hidden.",
       "Restored": "{name} is back in the sidebar.",
       "HideError": "Could not change {name}.",
-      "RenameMissing": "The segment {name} no longer exists."
+      "RenameMissing": "The segment {name} no longer exists.",
+      "FolderHidden": "The folder {name} is now hidden, with everything inside it.",
+      "FolderRestored": "The folder {name} is back in the sidebar."
     },
     "Manager": {
       "Segments": "Segments",
@@ -108,10 +112,13 @@
       "InheritedTooltip": "Included because the folder {name} is in the segment. To remove it, clear the parent folder.",
       "Via": "already included by {name}",
       "HiddenTitle": "Hidden",
-      "HiddenMeta": "Hidden from the sidebar. They are still in the world and can be restored.",
+      "HiddenMeta": "Folders and documents hidden from the sidebar. They are still in the world and can be restored.",
       "Restore": "Restore",
       "NothingHiddenTitle": "Nothing hidden",
-      "NothingHiddenText": "Right-click a document in the sidebar to hide it."
+      "NothingHiddenText": "Right-click a folder or document in the sidebar to hide it.",
+      "HiddenFolders": "Hidden folders",
+      "HiddenDocuments": "Hidden documents",
+      "InsideHidden": "inside {name}, which is also hidden"
     }
   }
 }

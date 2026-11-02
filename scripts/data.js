@@ -128,6 +128,19 @@ export function folderChain(folder) {
   return ids;
 }
 
+/** Pasta oculta mais próxima, contando a própria pasta e as de cima, ou null. */
+export function hiddenFolderIn(folder) {
+  for (let f = folder, depth = 0; f && depth < MAX_CHAIN; f = f.folder, depth++) {
+    if (isHidden(f)) return f;
+  }
+  return null;
+}
+
+/** Fora da barra lateral: oculto por conta própria ou por estar dentro de uma pasta oculta. */
+export function isConcealed(doc) {
+  return isHidden(doc) || Boolean(hiddenFolderIn(doc?.folder));
+}
+
 export function folderPath(folder) {
   const names = [];
   for (let f = folder, depth = 0; f && depth < MAX_CHAIN; f = f.folder, depth++) names.unshift(f.name);

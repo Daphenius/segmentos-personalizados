@@ -4,7 +4,7 @@ import { readFileSync } from "node:fs";
 import { makeWorld } from "./fake-foundry.mjs";
 import {
   sanitizeSegments, pickSegmentId, displayName, tCount, t, getFolder, folderTree, folderChain, folderPath,
-  inheritedFrom, coveringFolderId, segmentHas, resolveSegment, countSegment
+  inheritedFrom, coveringFolderId, segmentHas, resolveSegment, countSegment, isHidden, hiddenFolderIn, isConcealed
 } from "../scripts/data.js";
 import { registerSettings, getSegments, updateSegments, cleanupInvalidRefs } from "../scripts/store.js";
 
@@ -324,4 +324,39 @@ test("botão de remover e troca de segmento antes de gravar: remove do segmento 
   assert.deepEqual(byId("A").folderIds, []);
   assert.deepEqual(byId("B").documentIds, ["a1"]);
   assert.deepEqual(byId("B").folderIds, ["f1"]);
+});
+
+/* Pastas ocultas */
+
+const hide = target => { target.flags = { "segmentos-personalizados": { hidden: true } }; };
+
+test("pasta oculta esconde os documentos dela e das subpastas", () => {
+  hide(world.folders.get("f2"));
+  assert.equal(isConcealed(world.actors.get("a1")), true);   // dentro de Mortos-vivos
+  assert.equal(isConcealed(world.actors.get("a2")), true);   // em Antigos, subpasta
+  assert.equal(isConcealed(world.actors.get("a3")), false);  // em Inimigos, acima
+  assert.equal(isConcealed(world.actors.get("a5")), false);  // sem pasta
+  // Só o documento com a própria flag conta como oculto avulso.
+  assert.equal(isHidden(world.actors.get("a1")), false);
+});
+
+test("hiddenFolderIn acha a pasta oculta mais próxima, contando a própria", () => {
+  hide(world.folders.get("f1"));
+  hide(world.folders.get("f3"));
+  assert.equal(hiddenFolderIn(world.folders.get("f3")).id, "f3");
+  assert.equal(hiddenFolderIn(world.folders.get("f2")).id, "f1");
+  assert.equal(hiddenFolderIn(world.folders.get("f4")), null);
+  assert.equal(hiddenFolderIn(null), null);
+});
+
+test("documento oculto por conta própria continua oculto fora de pasta", () => {
+  hide(world.actors.get("a5"));
+  assert.equal(isConcealed(world.actors.get("a5")), true);
+});
+
+test("ciclo corrompido de pastas não trava a busca por pasta oculta", () => {
+  const a = world.folder("c1", "Ciclo A");
+  const b = world.folder("c2", "Ciclo B", "c1");
+  a.folder = b;
+  assert.equal(hiddenFolderIn(a), null);
 });

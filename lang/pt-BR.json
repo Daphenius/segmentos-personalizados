@@ -35,7 +35,9 @@
       "ClearFilter": "Limpar filtro",
       "Manage": "Gerenciar segmentos",
       "Hide": "Ocultar da barra lateral",
-      "Restore": "Restaurar na barra lateral"
+      "Restore": "Restaurar na barra lateral",
+      "HideFolder": "Ocultar pasta da barra lateral",
+      "RestoreFolder": "Restaurar pasta na barra lateral"
     },
     "Notify": {
       "GMOnlyEdit": "Só o Mestre pode alterar segmentos.",
@@ -46,7 +48,9 @@
       "Hidden": "{name} foi ocultado.",
       "Restored": "{name} voltou para a barra lateral.",
       "HideError": "Não foi possível alterar {name}.",
-      "RenameMissing": "O segmento {name} não existe mais."
+      "RenameMissing": "O segmento {name} não existe mais.",
+      "FolderHidden": "A pasta {name} foi ocultada, com tudo o que está dentro dela.",
+      "FolderRestored": "A pasta {name} voltou para a barra lateral."
     },
     "Manager": {
       "Segments": "Segmentos",
@@ -108,10 +112,13 @@
       "InheritedTooltip": "Incluída porque a pasta {name} está no segmento. Para tirar, desmarque a pasta de cima.",
       "Via": "já entra por {name}",
       "HiddenTitle": "Ocultos",
-      "HiddenMeta": "Escondidos da barra lateral. Continuam no mundo e podem ser restaurados.",
+      "HiddenMeta": "Pastas e documentos escondidos da barra lateral. Continuam no mundo e podem ser restaurados.",
       "Restore": "Restaurar",
       "NothingHiddenTitle": "Nada oculto",
-      "NothingHiddenText": "Use o botão direito em um documento da barra lateral para ocultá-lo."
+      "NothingHiddenText": "Use o botão direito em uma pasta ou documento da barra lateral para ocultá-lo.",
+      "HiddenFolders": "Pastas ocultas",
+      "HiddenDocuments": "Documentos ocultos",
+      "InsideHidden": "dentro de {name}, que também está oculta"
     }
   }
 }

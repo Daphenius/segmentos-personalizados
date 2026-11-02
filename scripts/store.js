@@ -113,7 +113,10 @@ export async function setHidden(doc, hidden) {
   try {
     if (hidden) await doc.setFlag(MODULE_ID, "hidden", true);
     else await doc.unsetFlag(MODULE_ID, "hidden");
-    ui.notifications.info(t(hidden ? "Notify.Hidden" : "Notify.Restored", { name: doc.name }));
+    const key = doc.documentName === "Folder"
+      ? (hidden ? "Notify.FolderHidden" : "Notify.FolderRestored")
+      : (hidden ? "Notify.Hidden" : "Notify.Restored");
+    ui.notifications.info(t(key, { name: doc.name }));
     return true;
   } catch (err) {
     console.error(`${MODULE_ID} | Falha ao ocultar/restaurar ${doc.name}`, err);

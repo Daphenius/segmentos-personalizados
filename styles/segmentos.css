@@ -342,6 +342,7 @@ li.folder.sp-hidden { display: none !important; }
 .sp-manager .sp-title a[data-action]:hover { color: var(--sp-accent); text-shadow: none; }
 
 .sp-manager .sp-folder-icon { width: 18px; text-align: center; color: var(--sp-accent); }
+.sp-manager .sp-row > .sp-folder-icon { flex: 0 0 28px; width: 28px; font-size: 1.2em; }
 
 .sp-manager .sp-card {
   margin-bottom: 10px;

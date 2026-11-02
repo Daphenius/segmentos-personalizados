@@ -2,7 +2,7 @@
   "id": "segmentos-personalizados",
   "title": "Segmentos Personalizados",
   "description": "Organiza pastas e documentos de Atores e Itens em segmentos, sem movê-los, e permite ocultar documentos da barra lateral.",
-  "version": "1.7.2",
+  "version": "1.8.0",
   "authors": [
     {
       "name": "Daphenius",
@@ -11,7 +11,7 @@
   ],
   "url": "https://github.com/Daphenius/segmentos-personalizados",
   "manifest": "https://github.com/Daphenius/segmentos-personalizados/releases/latest/download/module.json",
-  "download": "https://github.com/Daphenius/segmentos-personalizados/releases/download/v1.7.2/segmentos-personalizados.zip",
+  "download": "https://github.com/Daphenius/segmentos-personalizados/releases/download/v1.8.0/segmentos-personalizados.zip",
   "license": "https://github.com/Daphenius/segmentos-personalizados/blob/main/LICENSE",
   "readme": "https://github.com/Daphenius/segmentos-personalizados/blob/main/README.md",
   "changelog": "https://github.com/Daphenius/segmentos-personalizados/blob/main/CHANGELOG.md",

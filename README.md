@@ -9,7 +9,7 @@ Se encontrar bugs ou tiver sugestões, abra uma [issue](https://github.com/Daphe
 
 ---
 
-**Versão 1.7.2** · Foundry VTT 14 · Qualquer sistema · Português e English · Licença MIT · ✅ Testado no Foundry
+**Versão 1.8.0** · Foundry VTT 14 · Qualquer sistema · Português e English · Licença MIT · ✅ Testado no Foundry
 
 Módulo para Foundry VTT 14 (não funciona em versões anteriores). Não depende de nenhum sistema de jogo. Permite ao Mestre reunir pastas inteiras e documentos avulsos de Atores e Itens em segmentos (ex.: "Inimigos", "Chefes"), sem mover, copiar ou apagar nada.
 
@@ -26,7 +26,7 @@ Módulo para Foundry VTT 14 (não funciona em versões anteriores). Não depende
     - Documento que já entra por uma pasta: mostra "já entra por *X*".
 - **Filtro na barra lateral:** Todos, Sem segmento, cada segmento e Ocultos (esse último só para o Mestre). Quando há um filtro ativo, o campo fica destacado e ganha um botão × para voltar a "Todos".
 - **Temas:** oito temas — Âmbar (padrão), Esmeralda, Arcano, Gelo, Carmesim, Ouro, Pergaminho (claro) e Obsidiana (escuro). Escolha pelas bolinhas no rodapé da janela de segmentos ou em Configurações > Segmentos Personalizados > Tema. Cada usuário escolhe o seu. Os temas coloridos acompanham o modo claro/escuro do Foundry; Pergaminho e Obsidiana usam fundo próprio.
-- **Ocultar/restaurar** pelo botão direito (só o Mestre).
+- **Ocultar/restaurar** pelo botão direito (só o Mestre), em documentos e em **pastas inteiras**. Uma pasta oculta some da barra lateral com tudo o que está dentro, inclusive subpastas e o que entrar nela depois. Para ver ou restaurar, use o filtro **Ocultos** na barra lateral ou o atalho **Ocultos** no gerenciador, que lista as pastas e os documentos ocultos separadamente.
 - **Idiomas:** português (Brasil) e inglês. O módulo segue o idioma escolhido no Foundry (Configurações > Idioma). Em qualquer outro idioma, aparece em inglês.
 
 ## Como os dados são guardados
@@ -38,6 +38,7 @@ Módulo para Foundry VTT 14 (não funciona em versões anteriores). Não depende
   - um segmento sem nome aparece como "Sem nome" (o texto não é gravado, então muda junto com o idioma);
   - IDs repetidos na mesma lista de pastas ou documentos viram um só;
   - se dois segmentos tiverem o mesmo ID (só acontece com edição manual dos dados), o segundo passa a usar o ID com sufixo `-2`, `-3`... Os dois continuam existindo.
+- Ocultar guarda a flag `flags.segmentos-personalizados.hidden` no próprio documento ou pasta. Restaurar apaga a flag.
 - O tema é uma configuração de cliente (`segmentos-personalizados.theme`): cada pessoa escolhe o seu.
 
 ## Quando algo muda no Foundry
@@ -55,7 +56,8 @@ O Foundry não tem uma API para filtrar a barra lateral. O módulo trabalha sobr
 - **Hook usado:** `renderActorDirectory` / `renderItemDirectory`. Ele roda a cada redesenho da barra lateral. A cada vez, o módulo recria os controles (sem duplicar) e reaplica o filtro escolhido. O filtro fica guardado na memória, então sobrevive aos redesenhos. Sistemas que trocam a classe da barra lateral (o dnd5e pode usar uma subclasse) continuam disparando esses hooks, porque o Foundry chama o hook de cada classe da herança.
 - **Documentos:** cada linha `li.directory-item[data-entry-id]` recebe a classe `sp-hidden` (`display: none`) quando não pertence ao filtro.
 - **Pastas:** a decisão vem dos dados, não do HTML, porque o conteúdo de uma pasta fechada pode não estar desenhado. Uma pasta `li.folder[data-folder-id]` fica visível se algum documento visível estiver nela ou em qualquer subpasta. Assim, as pastas acima de uma pasta incluída continuam aparecendo como caminho. Com "Todos" selecionado, nenhuma pasta é escondida, nem as vazias (comportamento normal do Foundry).
-- **Ocultar/restaurar:** ocultar só muda uma flag, e o Foundry não necessariamente redesenha a barra lateral por isso. O módulo escuta `updateActor` / `updateItem` e, quando a mudança tem flags do módulo, chama `ui.actors.render()` / `ui.items.render()`. O hook roda em todos os clientes, então a barra lateral de todos é atualizada sem recarregar a página. Outras mudanças nos documentos não causam redesenho extra.
+- **Pastas ocultas:** uma pasta com a flag, ou dentro de uma pasta com a flag, fica escondida em todos os filtros menos em "Ocultos", e os documentos dentro dela também. Em "Ocultos", as pastas ocultas aparecem mesmo vazias. O menu do botão direito das pastas usa o hook `getFolderContextOptions`, que vale para todas as barras laterais; o módulo só acrescenta as opções nas de Atores e Itens.
+- **Ocultar/restaurar:** ocultar só muda uma flag, e o Foundry não necessariamente redesenha a barra lateral por isso. O módulo escuta `updateActor` / `updateItem` / `updateFolder` e, quando a mudança tem flags do módulo, chama `ui.actors.render()` / `ui.items.render()`. O hook roda em todos os clientes, então a barra lateral de todos é atualizada sem recarregar a página. Outras mudanças nos documentos não causam redesenho extra.
 - **Se o Foundry mudar o HTML da barra lateral** (nomes de classes ou atributos), o filtro deixa de esconder linhas, mas não quebra nada nem apaga dados. Nesse caso, ajuste os seletores em `applyFilter`, no `scripts/sidebar.js`.
 
 ## Limitações

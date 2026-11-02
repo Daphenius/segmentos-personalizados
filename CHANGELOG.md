@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.8.0
+
+### Adicionado
+- **Ocultar uma pasta inteira:** botão direito numa pasta de Atores ou Itens → *Ocultar pasta da barra lateral*. A pasta some com tudo o que está dentro, inclusive subpastas e o que for colocado nela depois. Para desfazer, *Restaurar pasta na barra lateral* no mesmo menu (com o filtro *Ocultos*) ou o botão *Restaurar* no gerenciador.
+- O filtro *Ocultos* da barra lateral mostra as pastas ocultas, mesmo vazias, e os documentos dentro delas.
+- No gerenciador, a tela *Ocultos* separa **Pastas ocultas** (com o caminho e quantos documentos têm dentro) e **Documentos ocultos**. O número ao lado de *Ocultos* soma os dois. Uma pasta dentro de outra também oculta mostra esse aviso, porque restaurar só ela não a traz de volta.
+- Nos segmentos, documentos que estão dentro de uma pasta oculta aparecem marcados como ocultos, igual aos ocultos avulsos.
+
+### Testes
+- Quatro testes novos: pasta oculta esconde o que está nela e nas subpastas, a pasta oculta mais próxima é encontrada, documento oculto fora de pasta continua oculto e um ciclo corrompido de pastas não trava a busca. Total: 38.
+
 ## 1.7.2
 
 ### Corrigido
