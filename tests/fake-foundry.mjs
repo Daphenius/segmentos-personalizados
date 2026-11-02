@@ -1,4 +1,4 @@
-// Imitação mínima das partes do Foundry que data.js e store.js usam.
+// Imitação mínima das partes do Foundry que data.js, store.js e a lógica de manager.js usam.
 // Serve para testar a lógica; não prova nada sobre o comportamento dentro do Foundry.
 
 import { readFileSync } from "node:fs";
@@ -32,10 +32,17 @@ export function makeWorld({ isGM = true, activeGM = true, lang = "pt-BR" } = {})
   const notices = [];
   const settingsLog = [];
   let failNextSave = false;
+  let saveGate = null;
 
   const world = {
     folders, actors, items, store, notices, settingsLog,
     failNextSave() { failNextSave = true; },
+    /** Segura as próximas gravações até chamar a função devolvida (gravação lenta no servidor). */
+    holdSaves() {
+      let release;
+      saveGate = new Promise(resolve => { release = resolve; });
+      return () => { saveGate = null; release(); };
+    },
     folder(id, name, parent = null, type = "Actor") {
       const folder = { id, name, type, folder: parent ? folders.get(parent) : null };
       folders.set(id, folder);
@@ -68,6 +75,7 @@ export function makeWorld({ isGM = true, activeGM = true, lang = "pt-BR" } = {})
       get(scope, key) { return structuredClone(store[key]); },
       async set(scope, key, value) {
         await Promise.resolve();
+        if (saveGate) await saveGate;
         if (failNextSave) {
           failNextSave = false;
           throw new Error("falha simulada");
@@ -78,6 +86,11 @@ export function makeWorld({ isGM = true, activeGM = true, lang = "pt-BR" } = {})
         return value;
       }
     }
+  };
+  // Só o necessário para importar manager.js; a janela em si não é desenhada nos testes.
+  globalThis.foundry = {
+    applications: { api: { ApplicationV2: class {}, DialogV2: {} } },
+    utils: { randomID: () => Math.random().toString(36).slice(2, 18) }
   };
   globalThis.ui = {
     notifications: {

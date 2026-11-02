@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.7.2
+
+### Corrigido
+- **Alteração gravada no segmento errado:** se uma gravação ainda estava em andamento e você marcava, desmarcava ou removia uma pasta ou documento e logo trocava de segmento, a alteração caía no segmento novo, e o segmento onde você clicou ficava igual. Agora a alteração vale sempre para o segmento que estava aberto no momento do clique. Vale para as caixas de marcação e para os botões × da aba Conteúdo.
+
+### Testes
+- Quatro testes novos que seguram uma gravação na fila e trocam de segmento antes de ela terminar: marcar documento, marcar pasta, desmarcar e remover pelo botão ×. Os quatro falham na 1.7.1 e passam na 1.7.2. Total: 34.
+
 ## 1.7.1
 
 ### Corrigido

@@ -9,7 +9,7 @@ Se encontrar bugs ou tiver sugestões, abra uma [issue](https://github.com/Daphe
 
 ---
 
-**Versão 1.7.1** · Foundry VTT 14 · Qualquer sistema · Português e English · Licença MIT · ✅ Testado no Foundry
+**Versão 1.7.2** · Foundry VTT 14 · Qualquer sistema · Português e English · Licença MIT · ✅ Testado no Foundry
 
 Módulo para Foundry VTT 14 (não funciona em versões anteriores). Não depende de nenhum sistema de jogo. Permite ao Mestre reunir pastas inteiras e documentos avulsos de Atores e Itens em segmentos (ex.: "Inimigos", "Chefes"), sem mover, copiar ou apagar nada.
 
@@ -106,7 +106,7 @@ Bugs e sugestões pelas [issues do GitHub](https://github.com/Daphenius/segmento
 ## Testes
 Testado no Foundry VTT 14 com o sistema D&D 5e.
 
-Testes automáticos (`npm test`, Node 22): cobrem a limpeza dos dados, a compatibilidade com dados antigos, pastas e herança de subpastas, seleção de segmento, a fila de gravação e as traduções (os dois arquivos precisam ter as mesmas chaves e os mesmos campos). Rodam com uma imitação mínima do Foundry, então mostram que a lógica está certa, não que o módulo funciona dentro do Foundry.
+Testes automáticos (`npm test`, Node 22): cobrem a limpeza dos dados, a compatibilidade com dados antigos, pastas e herança de subpastas, seleção de segmento, a fila de gravação (inclusive trocar de segmento na janela enquanto uma alteração espera para ser gravada) e as traduções (os dois arquivos precisam ter as mesmas chaves e os mesmos campos). Rodam com uma imitação mínima do Foundry, então mostram que a lógica está certa, não que o módulo funciona dentro do Foundry.
 
 ## Licença e créditos
 

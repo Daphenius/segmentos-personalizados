@@ -8,6 +8,10 @@ import {
 } from "../scripts/data.js";
 import { registerSettings, getSegments, updateSegments, cleanupInvalidRefs } from "../scripts/store.js";
 
+// manager.js lê foundry.applications.api ao ser importado, então o mundo falso vem antes.
+makeWorld();
+const { SegmentManager } = await import("../scripts/manager.js");
+
 const KEY = "actorsSegments";
 let world;
 
@@ -260,4 +264,64 @@ test("aviso de limpeza sai no idioma do Mestre", async () => {
   await cleanupInvalidRefs("actors");
   assert.equal(world.notices.at(-1)[1], "Custom Segments: 1 reference(s) to deleted entries were removed from the Actors segments.");
   assert.equal(t("Type.actors.Title"), "Actor Segments");
+});
+
+/* Janela de segmentos: seleção x fila de gravação */
+
+// Prepara A e B, segura uma gravação anterior na fila e devolve a janela com A selecionado.
+async function pendingWindow() {
+  await updateSegments("actors", list => { list.push(seg("A", [], ["a1"]), seg("B")); });
+  const app = new SegmentManager("actors");
+  app.selectedId = "A";
+  const release = world.holdSaves();
+  const earlier = updateSegments("actors", list => { list[0].name = "A renomeado"; });
+  return { app, release, earlier };
+}
+
+const byId = id => getSegments("actors").find(s => s.id === id);
+
+test("marcar documento e trocar de segmento antes de gravar: altera o segmento do clique", async () => {
+  const { app, release, earlier } = await pendingWindow();
+  const pending = app.setMembership("document", "a5", true, { isConnected: false });
+  app.selectedId = "B";
+  release();
+  await Promise.all([earlier, pending]);
+  assert.deepEqual(byId("A").documentIds, ["a1", "a5"]);
+  assert.deepEqual(byId("B").documentIds, []);
+});
+
+test("marcar pasta e trocar de segmento antes de gravar: altera o segmento do clique", async () => {
+  const { app, release, earlier } = await pendingWindow();
+  const pending = app.setMembership("folder", "f4", true, { isConnected: false });
+  app.selectedId = "B";
+  release();
+  await Promise.all([earlier, pending]);
+  assert.deepEqual(byId("A").folderIds, ["f4"]);
+  assert.deepEqual(byId("B").folderIds, []);
+});
+
+test("desmarcar e trocar de segmento antes de gravar: remove do segmento do clique", async () => {
+  const { app, release, earlier } = await pendingWindow();
+  const pending = app.setMembership("document", "a1", false, { isConnected: false });
+  app.selectedId = "B";
+  release();
+  await Promise.all([earlier, pending]);
+  assert.deepEqual(byId("A").documentIds, []);
+});
+
+test("botão de remover e troca de segmento antes de gravar: remove do segmento do clique", async () => {
+  await updateSegments("actors", list => { list.push(seg("A", ["f1"], ["a1"]), seg("B", ["f1"], ["a1"])); });
+  const app = new SegmentManager("actors");
+  app.selectedId = "A";
+  const release = world.holdSaves();
+  const earlier = updateSegments("actors", list => { list[0].name = "A renomeado"; });
+  const removeDoc = app.removeRef("documentIds", "a1");
+  const removeFolder = app.removeRef("folderIds", "f1");
+  app.selectedId = "B";
+  release();
+  await Promise.all([earlier, removeDoc, removeFolder]);
+  assert.deepEqual(byId("A").documentIds, []);
+  assert.deepEqual(byId("A").folderIds, []);
+  assert.deepEqual(byId("B").documentIds, ["a1"]);
+  assert.deepEqual(byId("B").folderIds, ["f1"]);
 });

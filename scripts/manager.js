@@ -346,8 +346,11 @@ export class SegmentManager extends ApplicationV2 {
 
   async setMembership(kind, refId, checked, box) {
     const key = kind === "folder" ? "folderIds" : "documentIds";
+    // O segmento é o da hora do clique. A alteração pode esperar na fila, e até lá
+    // o Mestre já pode ter trocado de segmento na janela.
+    const segmentId = this.selectedId;
     const result = await updateSegments(this.type, segments => {
-      const segment = segments.find(s => s.id === this.selectedId);
+      const segment = segments.find(s => s.id === segmentId);
       if (!segment || segment[key].includes(refId) === checked) return false;
       segment[key] = checked ? [...segment[key], refId] : segment[key].filter(id => id !== refId);
     });
@@ -357,8 +360,9 @@ export class SegmentManager extends ApplicationV2 {
   }
 
   removeRef(key, refId) {
+    const segmentId = this.selectedId;
     return updateSegments(this.type, segments => {
-      const segment = segments.find(s => s.id === this.selectedId);
+      const segment = segments.find(s => s.id === segmentId);
       if (!segment || !segment[key].includes(refId)) return false;
       segment[key] = segment[key].filter(id => id !== refId);
     });
