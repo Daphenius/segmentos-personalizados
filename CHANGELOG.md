@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.8.1
+
+- Atualizado para o Foundry VTT 14.370 (versão estável mais recente).
+
 ## 1.8.0
 
 ### Adicionado
